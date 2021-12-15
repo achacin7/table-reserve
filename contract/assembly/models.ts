@@ -1,4 +1,4 @@
-import { PersistentVector, context, u128 } from "near-sdk-core";
+import {PersistentVector, context, u128} from "near-sdk-core";
 
 /** Saving the table reservation status */
 
@@ -9,32 +9,40 @@ export enum status {
 
 @nearBindgen
 export class ReserveTable {
-    id:u64
-    tableName:string;
-    description:string;
-    status:status;
-    premiumReserve:boolean;
-    reserveName: string;
-    costReserve: u128;
+    id: i32
+    tableName: string;
+    description: string;
+    status: status;
+    premiumReserve: boolean;
+    reservedBy: string;
+    reserveCost: f64;
+
     /** constructor to create the tables */
     constructor(
-        id:u64,
+        id: i32,
         tableName: string,
-        description:string,
+        description: string,
     ) {
         this.id = id;
         this.tableName = tableName;
         this.description = description;
         this.status = status.available;
+        this.reservedBy = "Not reserved yet";
+        this.reserveCost = 0;
+
     }
+
     /** method of reservation of the premium table*/
-    /*public reserveTable(
-        premiumReserve:boolean,
-    ){
-        this.premiumReserve = premiumReserve;
-        this.reserveName = context.sender;
-        this.costReserve = context.attachedDeposit;
-    }*/
+    public reserveTable(): void {
+        this.status = status.reserve;
+        this.reservedBy = context.sender;
+        let aux = ((context.attachedDeposit.toF64())/(1e+24));
+        this.reserveCost = Math.round(aux*10000)/10000;
+
+        if(this.reserveCost >= 0.1) {
+            this.premiumReserve = true;
+        }
+    }
 }
 
 /** saves the table information */
