@@ -4,10 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
-/out
+/.cache
+/contract/node_modules
 
 #keys
-/neardev
 
 # testing
 /coverage
@@ -25,3 +25,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#front
+/dist
+/src
