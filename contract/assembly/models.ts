@@ -53,6 +53,7 @@ export class ReserveTable {
         this.premiumReserve = false;
         this.reservedBy = notReserved;
         this.reserveCost = 0;
+        this.foodCost = 0;
     }
 
     public setFoodCost(cost: f64): void{

@@ -36,19 +36,23 @@ export function viewReservedById(): Array<ReserveTable> {
 
 
 export function reserve(id: i32): void {
-    if (!tables[id].status) {
-        let tableAux = tables[id];
-        tableAux.reserveTable();
-        tables.replace(<i32>id, tableAux);
+    for (let i = 0; i < tables.length; i++) {
+        if(tables[i].id == id){
+            if (!tables[i].status) {
+                let tableAux = tables[i];
+                tableAux.reserveTable();
+                tables.replace(<i32>i, tableAux);
+            }
+        }
     }
 }
 
-export function assignFoodCost(id: i32, cost: f64): void {
+export function assignFoodCost(id: i32, cost: string): void {
     for (let i = 0; i < tables.length; i++) {
         if(tables[i].id == id){
             if (tables[id].status) {
                 let tableAux = tables[id];
-                tableAux.setFoodCost(cost);
+                tableAux.setFoodCost(parseFloat(cost));
                 tables.replace(<i32>id, tableAux);
                 logging.log("Precio de la comida asignado con éxito!");
             }else{
@@ -93,17 +97,6 @@ export function payDifference(id: i32): void{
         }
     }
 }
-
-export function closeAllReservation(): void {
-    for (let i = 0; i < tables.length; i++) {
-        if (tables[i].status && tables[i].reservedBy == context.sender) {
-            let aux = tables[i]
-            aux.clearReservation();
-            tables.replace(<i32>i, aux);
-        }
-    }
-}
-
 
 export function deleteTable(id: i32): void {
     assert(id >= 0, "Introduce un id válido")
