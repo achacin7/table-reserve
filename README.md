@@ -90,18 +90,18 @@ yarn build && near dev-deploy
 ``` 
 Pruebas Unitarias 
 ==================
-###1.  Crear las mesas del restaurant
+### 1.  Crear las mesas del restaurant
 Las mesas se crean de acuerdo al límite establecido por el restaurante, en caso de querer extender el límite de mesas; modificar 
 la constante `TABLE_LIMIT` dentro de la ruta `contract/assembly/index.ts`
 ```
 near call  <your deployed contract> newTable '{"tableName":"Mesa 1","description":"Capacidad para 2 personas"}' --account_id=<username>.testnet
 ```
-###2. Lista de las mesas disponibles
+### 2. Lista de las mesas disponibles
 Muestra todas las mesas disponible para ser reservadas por el cliente
 ```
 near call <your deployed contract> viewTables --account_id=<username>.testnet
 ```
-###3. Reservar Mesa
+### 3. Reservar Mesa
 Se puede reservar la mesa con un deposito ó reservarla sin deposito. 
 En caso de reservar con deposito, este se descontará del consumo final que obtengas en el restaurant.
 ```
@@ -111,28 +111,28 @@ Reservar sin deposito
 ```
 near call <your deployed contract> reserve '{"id":0}' --account_id=<username>.testnet
 ```
-###4. Lista de mesas reservadas por usuario
+### 4. Lista de mesas reservadas por usuario
 Te permite ver soló las mesas que están reservadas por el usuario de la billetera logeada. `<username>.testnet`
 ```
 near call <your deployed contract> viewReservedById --account_id=<username>.testnet
 ```
-###5. Asignar costo de la comida 
+### 5. Asignar costo de la comida 
 Al finalizar el consumo, se agregará el costo final de lo consumido dentro de la mesa, específicamente en el campo costo de comida. 
 Esto lo realizará la personas encarga del restaurant
 ```
 near call <your deployed contract> assignFoodCost '{"id": 0, "cost": "0.1"}' --account_id=<username>.testnet
 ```
-###5. Pagar diferencia
+### 6. Pagar diferencia
 Sí lo consumido es mayor al costo de la reserva se deberá pagar la diferencia
 ```
 near call <your deployed contract> payDifference '{"id": 0}' --account_id=<username>.testnet --deposit=1.0
 ```
-###6. Dejar la mesa en disponible nuevamente
+### 7. Dejar la mesa en disponible nuevamente
 El usuario luego de haber cancelado la diferencia sí la hubo, podrá cambiar el estado de la mesa en disponible y está pasara a ser visibles por los demas usuarios
 ```
 near call <your deployed contract> closeReservation '{"id": 0}' --account_id=<username>.testnet
 ```
-###7. Borrar Mesas
+### 8. Borrar Mesas
 Las mesas soló pueden ser borradas por el personal del restaurant y las mesas deben de estar en estatus disponible, si las mesas 
 están en estado reservadas la misma no pdrá ser borrada ya que está siendo reservada por un cliente.
 ```
