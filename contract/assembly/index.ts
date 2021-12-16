@@ -3,7 +3,7 @@ import {context} from "near-sdk-core";
 import {logging} from "near-sdk-as";
 
 /** The maximum number of tables the contract returns. */
-const TABLE_LIMIT = 4;
+export const TABLE_LIMIT = 4;
 
 export function newTable(tableName: string,
                          description: string,
