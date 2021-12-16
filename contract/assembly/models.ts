@@ -19,6 +19,7 @@ export class ReserveTable {
     premiumReserve: boolean;
     reservedBy: string;
     reserveCost: f64;
+    foodCost: f64;
 
     /** constructor to create the tables */
     constructor(
@@ -32,7 +33,7 @@ export class ReserveTable {
         this.status = status.available;
         this.reservedBy = notReserved;
         this.reserveCost = 0;
-
+        this.foodCost = 0;
     }
 
     /** method of reservation of the premium table*/
@@ -52,6 +53,21 @@ export class ReserveTable {
         this.premiumReserve = false;
         this.reservedBy = notReserved;
         this.reserveCost = 0;
+    }
+
+    public setFoodCost(cost: f64): void{
+        this.foodCost = cost;
+    }
+
+    public updateReserveCost(): void{
+        let aux = this.reserveCost;
+        aux += context.attachedDeposit.toF64()/(1e+24);
+        this.reserveCost = Math.round(aux * 10000) / 10000;
+    }
+
+    public getDifference(): f64 {
+        let dif = Math.abs(this.foodCost - this.reserveCost);
+        return Math.round(dif * 10000) / 10000;
     }
 }
 
