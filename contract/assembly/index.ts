@@ -17,11 +17,10 @@ export function newTable(tableName: string,
 export function viewTables(): Array<ReserveTable> {
     const result = new Array<ReserveTable>();
     for (let i = 0; i < tables.length; i++) {
-        if(!tables[i].status){
+        if (!tables[i].status) {
             result.push(tables[i]);
         }
     }
-    logging.log("No hay mesas")
     return result;
 }
 
@@ -44,9 +43,19 @@ export function reserve(id: i32): void {
     }
 }
 
-export function closeReservation(id?: i32): void {
+export function closeReservation(id: i32): void {
     for (let i = 0; i < tables.length; i++) {
         if (tables[i].id == id && tables[i].status && tables[i].reservedBy == context.sender) {
+            let aux = tables[i]
+            aux.clearReservation();
+            tables.replace(<i32>i, aux);
+        }
+    }
+}
+
+export function closeAllReservation(): void {
+    for (let i = 0; i < tables.length; i++) {
+        if (tables[i].status && tables[i].reservedBy == context.sender) {
             let aux = tables[i]
             aux.clearReservation();
             tables.replace(<i32>i, aux);
@@ -60,7 +69,11 @@ export function deleteTable(id: i32): void {
     for (let i = 0; i < tables.length; i++) {
         if (tables[i].id == id && !tables[i].status) {
             tables.swap_remove(i);
+            logging.log("Mesa eliminada con éxito");
+            break;
+        }else if(tables[i].id == id && tables[i].status){
+           logging.log("No se puede eliminar una mesa que ya está reservada");
+           break;
         }
     }
-    logging.log("No se pueden borrar mesas reservadas")
 }
