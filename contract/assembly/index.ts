@@ -1,6 +1,6 @@
 import {tables, ReserveTable} from "./models";
 import {context} from "near-sdk-core";
-import { logging } from "near-sdk-as";
+import {logging} from "near-sdk-as";
 
 /** The maximum number of tables the contract returns. */
 const TABLE_LIMIT = 4;
@@ -21,14 +21,14 @@ export function viewTables(): Array<ReserveTable> {
             result.push(tables[i]);
         }
     }
+    logging.log("No hay mesas")
     return result;
 }
 
-export function viewReservedById(): Array<ReserveTable>{
-    logging.log(context.sender);
+export function viewReservedById(): Array<ReserveTable> {
     const resultById = new Array<ReserveTable>();
     for (let i = 0; i < tables.length; i++) {
-        if(tables[i].reservedBy == context.sender){
+        if (tables[i].reservedBy == context.sender) {
             resultById.push(tables[i]);
         }
     }
@@ -38,19 +38,29 @@ export function viewReservedById(): Array<ReserveTable>{
 
 export function reserve(id: i32): void {
     if (!tables[id].status) {
-            let tableAux = tables[id];
-            tableAux.reserveTable()
-            tables.replace(<i32>id, tableAux);
+        let tableAux = tables[id];
+        tableAux.reserveTable();
+        tables.replace(<i32>id, tableAux);
+    }
+}
+
+export function closeReservation(id?: i32): void {
+    for (let i = 0; i < tables.length; i++) {
+        if (tables[i].id == id && tables[i].status && tables[i].reservedBy == context.sender) {
+            let aux = tables[i]
+            aux.clearReservation();
+            tables.replace(<i32>i, aux);
+        }
     }
 }
 
 
-export function deleteReservation(id: i32
-): void {
+export function deleteTable(id: i32): void {
     assert(id >= 0, "Introduce un id válido")
     for (let i = 0; i < tables.length; i++) {
-        if (tables[i].id == id) {
-            tables.swap_remove(i)
+        if (tables[i].id == id && !tables[i].status) {
+            tables.swap_remove(i);
         }
     }
+    logging.log("No se pueden borrar mesas reservadas")
 }
