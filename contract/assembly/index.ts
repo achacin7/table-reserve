@@ -64,8 +64,7 @@ export function closeReservation(id: i32): void {
         if (tables[i].id == id && tables[i].status && tables[i].reservedBy == context.sender) {
             if( tables[i].foodCost > tables[i].reserveCost ){
                 //Se le da un mensaje al cliente diciendo que debe pagar la diferencia para poder cerrar la reservación
-                let dif = tables[i].getDifference();
-                logging.log("Su depósito aún no cubre el costo total de la comida, debe completar una diferencia de: " + dif.toString());
+                showDifference(tables[i]);
             }else{
                 //Se limpia la mesa sin problemas ya que el depósito de la reservación cubre el costo de la comida
                 let aux = tables[i]
@@ -88,6 +87,8 @@ export function payDifference(id: i32): void{
             if(tables[i].reserveCost >= tables[i].foodCost){
                 closeReservation(id);
                 logging.log("Se pagó con éxito la comida!");
+            }else{
+                showDifference(tables[i]);
             }
         }
     }
@@ -116,4 +117,9 @@ export function deleteTable(id: i32): void {
            break;
         }
     }
+}
+
+export function showDifference( table: ReserveTable ): void {
+    let dif = table.getDifference();
+    logging.log("Su depósito aún no cubre el costo total de la comida, debe completar una diferencia de: " + dif.toString());
 }
