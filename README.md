@@ -184,8 +184,12 @@ Exploración del Proyecto
 ├── package.json
 ├── README.md
 └── yarn.lock
+└── Table Reserve Mockup.pdf
 ```
+Mockup de la Dapp
+=================
 
+El Mockup se encuentra en la estructura principal del proyecto, con el nombre `Table Reserve Mockup.pdf`
 
   [create-near-app]: https://github.com/near/create-near-app
   [Node.js]: https://nodejs.org/en/download/package-manager/
