@@ -21,7 +21,7 @@ export class ReserveTable {
     reserveCost: f64;
     foodCost: f64;
 
-    /** constructor to create the tables */
+    // Constructor para crear mesas
     constructor(
         id: i32,
         tableName: string,
@@ -36,7 +36,7 @@ export class ReserveTable {
         this.foodCost = 0;
     }
 
-    /** method of reservation of the premium table*/
+    // Método para pasar una mesa de disponible a reservada
     public reserveTable(): void {
         this.status = status.reserve;
         this.reservedBy = reserved;
@@ -48,6 +48,7 @@ export class ReserveTable {
         }
     }
 
+    // Método para cambiar una mesa de reservada a disponible
     public clearReservation(): void {
         this.status = status.available;
         this.premiumReserve = false;
@@ -56,21 +57,24 @@ export class ReserveTable {
         this.foodCost = 0;
     }
 
+    // Método para asignar el costo de la comida a una mesa
     public setFoodCost(cost: f64): void{
         this.foodCost = cost;
     }
 
+    // Método para actualizar el total de la reservación
     public updateReserveCost(): void{
         let aux = this.reserveCost;
         aux += context.attachedDeposit.toF64()/(1e+24);
         this.reserveCost = Math.round(aux * 10000) / 10000;
     }
 
+    // Método para obtener la diferencia entre el costo de la comida y la reservación
     public getDifference(): f64 {
         let dif = Math.abs(this.foodCost - this.reserveCost);
         return Math.round(dif * 10000) / 10000;
     }
 }
 
-/** saves the table information */
+// Guardar las mesas en un arreglo de mesas
 export let tables = new PersistentVector<ReserveTable>("tables")

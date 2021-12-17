@@ -5,6 +5,7 @@ import {logging} from "near-sdk-as";
 /** The maximum number of tables the contract returns. */
 export const TABLE_LIMIT = 4;
 
+// Método para crear mesas
 export function newTable(tableName: string,
                          description: string,
 ): void {
@@ -14,6 +15,7 @@ export function newTable(tableName: string,
     tables.push(new ReserveTable(tables.length, tableName, description));
 }
 
+// Método para ver mesas disponibles
 export function viewTables(): Array<ReserveTable> {
     const result = new Array<ReserveTable>();
     for (let i = 0; i < tables.length; i++) {
@@ -24,6 +26,7 @@ export function viewTables(): Array<ReserveTable> {
     return result;
 }
 
+// Método para ver mesas reservadas por un cliente en específico
 export function viewReservedById(): Array<ReserveTable> {
     const resultById = new Array<ReserveTable>();
     for (let i = 0; i < tables.length; i++) {
@@ -34,7 +37,7 @@ export function viewReservedById(): Array<ReserveTable> {
     return resultById
 }
 
-
+// Método para reservar mesas (Por parte del cliente)
 export function reserve(id: i32): void {
     for (let i = 0; i < tables.length; i++) {
         if(tables[i].id == id){
@@ -47,6 +50,7 @@ export function reserve(id: i32): void {
     }
 }
 
+// Método para asignar el costo de la comida en una mesa (Por parte del restaurante)
 export function assignFoodCost(id: i32, cost: string): void {
     for (let i = 0; i < tables.length; i++) {
         if(tables[i].id == id){
@@ -63,6 +67,7 @@ export function assignFoodCost(id: i32, cost: string): void {
     }
 }
 
+// Método para cerrar una reservación (Por parte del cliente) 
 export function closeReservation(id: i32): void {
     for (let i = 0; i < tables.length; i++) {
         if (tables[i].id == id && tables[i].status && tables[i].reservedBy == context.sender) {
@@ -80,6 +85,8 @@ export function closeReservation(id: i32): void {
     }
 }
 
+// Método para pagar la diferencia en caso de que el costo de la comida supere el deposito de la reservación
+// (Por parte del cliente)
 export function payDifference(id: i32): void{
     for (let i = 0; i < tables.length; i++) {
         if(tables[i].id == id && tables[i].status && tables[i].reservedBy == context.sender){
@@ -98,6 +105,7 @@ export function payDifference(id: i32): void{
     }
 }
 
+// Método para dar de baja una mesa (Por parte del reataurante)
 export function deleteTable(id: i32): void {
     assert(id >= 0, "Introduce un id válido")
     for (let i = 0; i < tables.length; i++) {
@@ -112,6 +120,7 @@ export function deleteTable(id: i32): void {
     }
 }
 
+// Método para mostrar la diferencia entre el costo de la comida y el deposito de la reservación
 export function showDifference( table: ReserveTable ): void {
     let dif = table.getDifference();
     logging.log("Su depósito aún no cubre el costo total de la comida, debe completar una diferencia de: " + dif.toString());
